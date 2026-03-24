@@ -1,0 +1,11 @@
+{% extends 'jobs/base.html' %}
+{% block title %}Home | Job Board{% endblock %}
+{% block content %}
+<div class="jumbotron p-5 bg-light rounded-3">
+  <h1 class="display-5">Job Board</h1>
+  <p class="lead">Find your next opportunity or post a new role.</p>
+  <hr class="my-4" />
+  <p>Employer and candidate workflow for jobs, applications, and profiles.</p>
+  <a class="btn btn-primary btn-lg" href="{% url 'job_list' %}" >Browse Jobs</a>
+</div>
+{% endblock %}

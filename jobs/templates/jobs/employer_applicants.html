@@ -1,0 +1,51 @@
+{% extends 'jobs/base.html' %}
+{% block title %}Applicants Dashboard | Job Board{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2>Applicants Dashboard</h2>
+  <p>Manage applications for your posted jobs.</p>
+
+  {% if applications %}
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Job Title</th>
+            <th>Candidate</th>
+            <th>Applied On</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for app in applications %}
+            <tr>
+              <td><a href="{% url 'job_detail' app.job.id %}">{{ app.job.title }}</a></td>
+              <td><a href="{% url 'profile_detail' app.profile.id %}">{{ app.profile.user.username }}</a></td>
+              <td>{{ app.applied_at|date:'M d, Y' }}</td>
+              <td>
+                <span class="badge 
+                  {% if app.status == 'applied' %}bg-primary
+                  {% elif app.status == 'reviewed' %}bg-warning
+                  {% elif app.status == 'accepted' %}bg-success
+                  {% elif app.status == 'rejected' %}bg-danger
+                  {% endif %}">
+                  {{ app.get_status_display }}
+                </span>
+              </td>
+              <td>
+                <a href="{% url 'application_detail' app.id %}" class="btn btn-sm btn-outline-primary">View Details</a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="alert alert-info">
+      <p>No applications yet. When candidates apply to your jobs, they'll appear here.</p>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

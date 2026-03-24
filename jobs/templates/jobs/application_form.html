@@ -1,0 +1,22 @@
+{% extends 'jobs/base.html' %}
+{% block title %}{% if is_update %}Update Application{% else %}Apply{% endif %} for {{ job.title }} | Job Board{% endblock %}
+{% block content %}
+<h2>{% if is_update %}Update Application{% else %}Apply{% endif %} for: {{ job.title }}</h2>
+<p>Company/Post owner: {{ job.profile.user.username }} - {{ job.profile.role|capfirst }}</p>
+<form method="post" enctype="multipart/form-data" class="mt-3">
+  {% csrf_token %}
+  {{ form.non_field_errors }}
+  <div class="mb-3">
+    {{ form.cover_letter.label_tag }}
+    {{ form.cover_letter }}
+    {{ form.cover_letter.errors }}
+  </div>
+  <div class="mb-3">
+    {{ form.cv.label_tag }}
+    {{ form.cv }}
+    {{ form.cv.errors }}
+  </div>
+  <button type="submit" class="btn btn-primary">{% if is_update %}Update Application{% else %}Submit Application{% endif %}</button>
+  <a class="btn btn-outline-secondary" href="{% url 'job_detail' job.id %e}">Back</a>
+</form>
+{% endblock %}

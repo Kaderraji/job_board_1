@@ -1,0 +1,62 @@
+{% extends 'jobs/base.html' %}
+{% block title %}Application Details | Job Board{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-8">
+      <h2>Application for: {{ application.job.title }}</h2>
+      <p><strong>Candidate:</strong> <a href="{% url 'profile_detail' application.profile.id %}">{{ application.profile.user.username }}</a> ({{ application.profile.get_role_display }})</p>
+      <p><strong>Email:</strong> {{ application.profile.user.email }}</p>
+      {% if application.profile.bio %}
+        <p><strong>Bio:</strong> {{ application.profile.bio }}</p>
+      {% endif %}
+      <p><strong>Applied On:</strong> {{ application.applied_at|date:'M d, Y' }}</p>
+      <p><strong>Status:</strong> 
+        <span class="badge 
+          {% if application.status == 'applied' %}bg-primary
+          {% elif application.status == 'reviewed' %}bg-warning
+          {% elif application.status == 'accepted' %}bg-success
+          {% elif application.status == 'rejected' %}bg-danger
+          {% endif %}">
+          {{ application.get_status_display }}
+        </span>
+      </p>
+
+      {% if application.cover_letter %}
+        <h4>Cover Letter</h4>
+        <div class="border p-3 mb-3">
+          {{ application.cover_letter|linebreaks }}
+        </div>
+      {% endif %}
+
+      {% if application.cv %}
+        <h4>CV/Resume</h4>
+        <p><a href="{{ application.cv.url }}" target="_blank" class="btn btn-primary">Download CV</a></p>
+      {% endif %}
+
+      {% if application.status == 'applied' %}
+        <h4>Actions</h4>
+        <form method="post" class="d-inline">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="reviewed">
+          <button type="submit" class="btn btn-warning">Mark as Reviewed</button>
+        </form>
+        <form method="post" class="d-inline ms-2">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="accepted">
+          <button type="submit" class="btn btn-success">Accept</button>
+        </form>
+        <form method="post" class="d-inline ms-2">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="rejected">
+          <button type="submit" class="btn btn-danger">Reject</button>
+        </form>
+      {% endif %}
+    </div>
+  </div>
+  <div class="mt-3">
+    <a href="{% url 'employer_applicants' %}" class="btn btn-secondary">Back to Applicants</a>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'jobs/base.html' %}
+{% block title %}Jobs | Job Board{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2>Job Listings</h2>
+  <a class="btn btn-success" href="{% url 'job_create' %}">Post New Job</a>
+</div>
+{% if jobs %}
+  <div class="row">
+    {% for job in jobs %}
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">{{ job.title }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">{{ job.location }} • {{ job.salary|default:'Salary not set' }}</h6>
+            <p class="card-text">{{ job.description|truncatechars:150 }}</p>
+            <a class="card-link" href="{% url 'job_detail' job.id %}">View Details</a>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <p>No jobs have been posted yet.</p>
+{% endif %}
+{% endblock %}
